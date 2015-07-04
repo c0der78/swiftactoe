@@ -1,0 +1,2 @@
+#!/bin/sh
+swiftc -sdk $(xcrun --show-sdk-path --sdk macosx) tictactoe.swift main.swift
