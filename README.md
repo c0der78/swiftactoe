@@ -1,6 +1,5 @@
 # swiftactoe
+
 simple tic tac toe in swift
 
-
-![Screenshot)(screenshot.png)
-
+![Screenshot)(https://github.com/c0der78/swiftactoe/blob/master/screenshot.png)
