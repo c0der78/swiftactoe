@@ -1,36 +1,26 @@
 import Darwin;
 
-class PointAndScore {
-
-    var score: Int;
-    var point: Point;
-
-    init( score: Int, point: Point) {
-        self.score = score;
-        self.point = point;
-    }
-}
-
 class Game
 {
-
+    // the player X/O defines
     static let PlayerX = 1;
     static let PlayerO = 2;
  
 	private var board: Board;
 	private var humanPlayer: Int;
 
+    // need a board to start a isGameOver
 	init(board: Board) {
 		self.board = board;
 		self.humanPlayer = 0;
 	}
-
 
     var isGameOver: Bool {
         //Game is over is someone has won, or board is full (draw)
         return (board.hasWon(Game.PlayerX) || board.hasWon(Game.PlayerO) || board.availablePoints().count == 0);
     }
 
+    //! reads input and determines human player (X or O)
     func setHumanPlayerFromInput() -> Bool {
                 
         let choice = readPlayer();
@@ -50,10 +40,13 @@ class Game
         return true;
     }
 
+    // reads a point from input and makes a move if available
     func placeHumanMoveFromInput() -> Bool {
         print("Your move: ", appendNewline:false);
 
         let userMove = readPoint();
+
+        // will use VT100 to replace the last line for error messages
 
         if (userMove == nil) {
             print("\u{1B}[A\r\u{1B}[2KInvalid point.  Try 'x-y' or 'x y'.  ", appendNewline: false);
@@ -68,14 +61,17 @@ class Game
         return true;
     }
 
+    //! calculate a computer move and place
     func placeComputerMove() -> Bool {
 
         if (isGameOver) { 
         	return false; 
         }
 
+        // get a list of available moves
         let pointsAvailable = board.availablePoints();
 
+        // no more moves?
         if (pointsAvailable.count == 0) {
             return false; 
         }
@@ -83,6 +79,7 @@ class Game
         var move: Point?;
         var imin: Int = 2;
 
+        // find the best move
         for point in pointsAvailable {
 
             if(!board.placeMove(point, player: self.computerPlayer)) {
@@ -111,14 +108,19 @@ class Game
     }
 
 
+    //! display the board to output
     func displayBoard() {
 
+        // dislay the y coords
         print("\u{1B}[0m  y 1   2   3");
 
+        // draw the top of the board
         printLine(13, leftCorner: "x \u{1B}[1;37m┌", rightCorner: "┐", interval: "┬");
+
 
         for var i = 0; i < board.size; i++ {
             
+            // draw each line
             print("\u{1B}[0m\(i+1) ", appendNewline: false);
 
             for var j = 0; j < board.size; j++ {
@@ -145,9 +147,11 @@ class Game
             }
         }
 
+        // draw the bottom border
         printLine(13, leftCorner: "  \u{1B}[1;37m└", rightCorner: "┘\u{1B}[0m", interval: "┴");
     } 
 
+    //! display the game status
     func displayWinner() {
 
 		if (board.hasWon(self.humanPlayer)) { 
@@ -160,10 +164,12 @@ class Game
 
     }
 
+    //! get the opposing piece (X or O)
     var computerPlayer: Int {
     	return self.humanPlayer == Game.PlayerX ? Game.PlayerO : Game.PlayerX
     }
 
+    // the minmax algorithm to recursively determine the best move
     private func minmax( depth: Int, turn: Int, var alpha: Int, var beta: Int) -> Int {  
 
         if (board.hasWon(self.humanPlayer)) { 
@@ -231,6 +237,7 @@ class Game
         return (turn == self.computerPlayer) ? imax : imin;
     }  
     
+    //! handy function to print a line for the board
     private func printLine(length: Int, leftCorner: String = "+", rightCorner:String = "+", interval:String = "-") {
         print(leftCorner,  appendNewline:false);
         for i in 0...length-3 {
@@ -244,6 +251,8 @@ class Game
     }
 
 
+    // read a line from input
+    // hard to believe straight swift has not much for this
 	private func readln() -> String? {
 	    var cstr: [UInt8] = []
 	    var c: Int32 = 0
@@ -252,6 +261,7 @@ class Game
 	        if (c == 10 || c == 13) || c > 255 { break }
 	        cstr.append(UInt8(c))
 	    }
+        // always add trailing zero
 	    cstr.append(0)
 
 	    let rval = String.fromCStringRepairingIllFormedUTF8(UnsafePointer<CChar>(cstr))
@@ -263,6 +273,7 @@ class Game
 	    return rval.0;
 	}
 
+    // read a player from input
 	private func readPlayer() -> Int? {
 	    if let str = readln() {
 	    	let c = str[str.startIndex]
@@ -276,9 +287,11 @@ class Game
 	    return nil;
 	}
 
+    // read a point from input
 	private func readPoint() -> Point? {
 	    if let str = readln() {
 
+            // split on space and '-'
 	        var coords = split(str.characters) { $0 == Character(" ") || $0 == Character("-") }.map{ String($0) }
 
 	        if (coords.count < 2) {
