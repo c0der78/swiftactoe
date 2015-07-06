@@ -1,2 +1,2 @@
 #!/bin/sh
-swiftc -sdk $(xcrun --show-sdk-path --sdk macosx) tictactoe.swift main.swift
+swiftc -sdk $(xcrun --show-sdk-path --sdk macosx) tictactoe.swift game.swift main.swift

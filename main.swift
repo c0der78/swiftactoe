@@ -6,47 +6,36 @@ func resetCursor() {
 
 var b = Board();
 
-print("Select starting player:\n\n\u{1B}[1;32m1.\u{1B}[0m Computer \u{1B}[32m2.\u{1B}[0m User: ", appendNewline: false);
+var game = Game(board: b);
 
-var choice = readInt();
+repeat {
+    print("Do you want to be X or O (X goes first)? ", appendNewline: false);
+} while(!game.setHumanPlayerFromInput())
 
-if(choice == 1){
-    var p = Point(x: Int(arc4random_uniform(3)), y: Int(arc4random_uniform(3)));
-    b.placeAMove(p, player: 1);
-}
+game.displayBoard();
 
-b.displayBoard();
+repeat {
 
-while (!b.isGameOver) {
-
-    if (!b.takeHumanInput()) {
+    if (!game.placeHumanMoveFromInput()) {
+        // try again, get new input
         continue;
     }
 
-    if (b.isGameOver) { break; }
-    
-    b.minimax(0, turn: 1);  
-    
-    if (b.computersMove != nil) {
-        if (!b.placeAMove(b.computersMove!, player: 1)) {
-            continue;
-        }
+    if (!game.placeComputerMove()) {
+        // system error
+        break;
     }
 
     resetCursor();
 
-    b.displayBoard();
+    game.displayBoard();
+
 }
+while(!game.isGameOver)
 
 resetCursor();
 
-b.displayBoard();
+game.displayBoard();
 
-if (b.hasXWon) { 
-    print("Unfortunately, you lost!");
-} else if (b.hasOWon) { 
-    print("You win!"); //Can't happen
-} else {
-    print("It's a draw!");
-}
+game.displayWinner();
 
