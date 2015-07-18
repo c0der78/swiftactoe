@@ -6,14 +6,14 @@ class Game
     static let PlayerX = 1;
     static let PlayerO = 2;
  
-	private var board: Board;
-	private var humanPlayer: Int;
+    private var board: Board;
+    private var humanPlayer: Int;
 
     // need a board to start a isGameOver
-	init(board: Board) {
-		self.board = board;
-		self.humanPlayer = 0;
-	}
+    init(board: Board) {
+      self.board = board;
+      self.humanPlayer = 0;
+    }
 
     var isGameOver: Bool {
         //Game is over is someone has won, or board is full (draw)
@@ -22,11 +22,10 @@ class Game
 
     //! reads input and determines human player (X or O)
     func setHumanPlayerFromInput() -> Bool {
-                
         let choice = readPlayer();
 
         if (choice == nil) {
-        	return false;
+          return false;
         }
 
         self.humanPlayer = choice!;
@@ -65,7 +64,7 @@ class Game
     func placeComputerMove() -> Bool {
 
         if (isGameOver) { 
-        	return false; 
+          return false; 
         }
 
         // get a list of available moves
@@ -119,7 +118,6 @@ class Game
 
 
         for var i = 0; i < board.size; i++ {
-            
             // draw each line
             print("\u{1B}[0m\(i+1) ", appendNewline: false);
 
@@ -139,7 +137,6 @@ class Game
                         break;
                 }
             }
-            
             print("\u{1B}[1;37m│");
 
             if ((i + 1) != board.size) {
@@ -154,19 +151,19 @@ class Game
     //! display the game status
     func displayWinner() {
 
-		if (board.hasWon(self.humanPlayer)) { 
-		    print("You win!"); //Can't happen
-		} else if (board.hasWon(self.computerPlayer)) {
-		    print("Unfortunately, you lost!");
-		} else {
-		    print("It's a draw!");
-		}
+    if (board.hasWon(self.humanPlayer)) { 
+        print("You win!"); //Can't happen
+    } else if (board.hasWon(self.computerPlayer)) {
+        print("Unfortunately, you lost!");
+    } else {
+        print("It's a draw!");
+    }
 
     }
 
     //! get the opposing piece (X or O)
     var computerPlayer: Int {
-    	return self.humanPlayer == Game.PlayerX ? Game.PlayerO : Game.PlayerX
+      return self.humanPlayer == Game.PlayerX ? Game.PlayerO : Game.PlayerX
     }
 
     // the minmax algorithm to recursively determine the best move
@@ -204,7 +201,6 @@ class Game
                     imax = val;
                     beta = imax;
                 }
-                
                 if (val == 1 || imax >= alpha) {
                     board[point.x, point.y] = 0;
                     break;
@@ -219,7 +215,7 @@ class Game
 
                 let val = minmax(depth + 1, turn: self.computerPlayer, alpha: alpha, beta: beta);
 
-				if (val < imin) {
+                if (val < imin) {
                     imin = val;
                     alpha = imin;
                 }
@@ -233,10 +229,9 @@ class Game
 
             board[point.x, point.y] = 0;
         } 
-        
         return (turn == self.computerPlayer) ? imax : imin;
-    }  
-    
+    }
+
     //! handy function to print a line for the board
     private func printLine(length: Int, leftCorner: String = "+", rightCorner:String = "+", interval:String = "-") {
         print(leftCorner,  appendNewline:false);
@@ -253,65 +248,65 @@ class Game
 
     // read a line from input
     // hard to believe straight swift has not much for this
-	private func readln() -> String? {
-	    var cstr: [UInt8] = []
-	    var c: Int32 = 0
-	    while c != 4 {
-	        c = getchar()
-	        if (c == 10 || c == 13) || c > 255 { break }
-	        cstr.append(UInt8(c))
-	    }
+    private func readln() -> String? {
+      var cstr: [UInt8] = []
+      var c: Int32 = 0
+      while c != 4 {
+          c = getchar()
+          if (c == 10 || c == 13) || c > 255 { break }
+          cstr.append(UInt8(c))
+      }
         // always add trailing zero
-	    cstr.append(0)
+      cstr.append(0)
 
-	    let rval = String.fromCStringRepairingIllFormedUTF8(UnsafePointer<CChar>(cstr))
+      let rval = String.fromCStringRepairingIllFormedUTF8(UnsafePointer<CChar>(cstr))
 
-	    if (rval.hadError) {
-	        return nil;
-	    }
+      if (rval.hadError) {
+          return nil;
+      }
 
-	    return rval.0;
-	}
+      return rval.0;
+  }
 
     // read a player from input
-	private func readPlayer() -> Int? {
-	    if let str = readln() {
-	    	let c = str[str.startIndex]
+  private func readPlayer() -> Int? {
+      if let str = readln() {
+        let c = str[str.startIndex]
 
-	        if c == "X" || c == "x" {
-	        	return Game.PlayerX;
-	        } else if c == "O" || c == "o" {
-	        	return Game.PlayerO;
-	       	}
-	    }
-	    return nil;
-	}
+          if c == "X" || c == "x" {
+            return Game.PlayerX;
+          } else if c == "O" || c == "o" {
+            return Game.PlayerO;
+          }
+      }
+      return nil;
+  }
 
     // read a point from input
-	private func readPoint() -> Point? {
-	    if let str = readln() {
+  private func readPoint() -> Point? {
+      if let str = readln() {
 
             // split on space and '-'
-	        var coords = split(str.characters) { $0 == Character(" ") || $0 == Character("-") }.map{ String($0) }
+          var coords = split(str.characters) { $0 == Character(" ") || $0 == Character("-") }.map{ String($0) }
 
-	        if (coords.count < 2) {
-	            return nil;
-	        }
+          if (coords.count < 2) {
+              return nil;
+          }
 
-	        let x = Int(coords[0]);
-	        let y = Int(coords[1]);
-	        
-	        if (x == nil || y == nil) {
-	            return nil;
-	        }
+          let x = Int(coords[0]);
+          let y = Int(coords[1]);
 
-	        if (x < 1 || x > 3 || y < 1 || y > 3) {
-	            return nil;
-	        }
+          if (x == nil || y == nil) {
+              return nil;
+          }
 
-	        return Point(x: x! - 1, y: y! - 1);
-	    }
-	    return nil;
-	}
-	    
+          if (x < 1 || x > 3 || y < 1 || y > 3) {
+              return nil;
+          }
+
+          return Point(x: x! - 1, y: y! - 1);
+      }
+      return nil;
+  }
+
 }

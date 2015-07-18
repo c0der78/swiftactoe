@@ -10,7 +10,7 @@ var game = Game(board: b);
 
 repeat {
     print("Do you want to be X or O (X goes first)? ", appendNewline: false);
-} 
+}
 while(!game.setHumanPlayerFromInput())
 
 game.displayBoard();
@@ -30,7 +30,6 @@ repeat {
     resetCursor();
 
     game.displayBoard();
-
 }
 while(!game.isGameOver)
 

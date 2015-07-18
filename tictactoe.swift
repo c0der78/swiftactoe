@@ -130,8 +130,8 @@ class Board {
 
     func placeMove(point: Point, player: Int) -> Bool {
 
-        if (point.x < 0 || point.x >= board.count || 
-            point.y < 0 || point.y >= board.count) {
+        if (point.x < 0 || point.x >= board.count ||
+        point.y < 0 || point.y >= board.count) {
             return false;
         }
 
@@ -139,21 +139,21 @@ class Board {
             return false;
         }
 
-        self.board[point.x][point.y] = player; 
+        self.board[point.x][point.y] = player;
         return true;
-    } 
+    }
 
     subscript(x: Int, y: Int) -> Int {
         get {
-            if (x < 0 || x >= board.count || 
-                y < 0 || y >= board.count) {
+            if (x < 0 || x >= board.count ||
+            y < 0 || y >= board.count) {
                 return 0;
             }
             return self.board[x][y];
         }
         set(value) {
-            if (x >= 0 && x < board.count && 
-                y >= 0 && y < board.count) {
+            if (x >= 0 && x < board.count &&
+            y >= 0 && y < board.count) {
                 self.board[x][y] = value;
             }
         }
