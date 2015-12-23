@@ -41,19 +41,19 @@ class Game
 
     // reads a point from input and makes a move if available
     func placeHumanMoveFromInput() -> Bool {
-        print("Your move: ", appendNewline:false);
+        print("Your move: ", terminator:"");
 
         let userMove = readPoint();
 
         // will use VT100 to replace the last line for error messages
 
         if (userMove == nil) {
-            print("\u{1B}[A\r\u{1B}[2KInvalid point.  Try 'x-y' or 'x y'.  ", appendNewline: false);
+            print("\u{1B}[A\r\u{1B}[2KInvalid point.  Try 'x-y' or 'x y'.  ", terminator:"");
             return false;
         }
 
         if (!b.placeMove(userMove!, player: self.humanPlayer) ) { //2 for O and O is the user
-            print("\u{1B}[A\r\u{1B}[2KThat move is already taken.  ", appendNewline: false);
+            print("\u{1B}[A\r\u{1B}[2KThat move is already taken.  ", terminator:"");
             return false;
         }
 
@@ -119,21 +119,21 @@ class Game
 
         for var i = 0; i < board.size; i++ {
             // draw each line
-            print("\u{1B}[0m\(i+1) ", appendNewline: false);
+            print("\u{1B}[0m\(i+1) ", terminator:"");
 
             for var j = 0; j < board.size; j++ {
 
-                print("\u{1B}[1;37m\u{2502}\u{1B}[1;33m", appendNewline: false);
+                print("\u{1B}[1;37m\u{2502}\u{1B}[1;33m", terminator:"");
 
                 switch(board[i, j]) {
                     case Game.PlayerO:
-                        print(" ◯ ", appendNewline:false);
+                        print(" ◯ ", terminator:"");
                         break;
                     case Game.PlayerX:
-                        print(" ╳ ", appendNewline:false);
+                        print(" ╳ ", terminator:"");
                         break;
                     default:
-                        print("   ", appendNewline:false);
+                        print("   ", terminator:"");
                         break;
                 }
             }
@@ -234,12 +234,12 @@ class Game
 
     //! handy function to print a line for the board
     private func printLine(length: Int, leftCorner: String = "+", rightCorner:String = "+", interval:String = "-") {
-        print(leftCorner,  appendNewline:false);
+        print(leftCorner,  terminator:"");
         for i in 0...length-3 {
             if ((i+1) % 4 == 0) {
-                print(interval, appendNewline:false);
+                print(interval, terminator:"");
             } else {
-                print("─",  appendNewline:false)
+                print("─",  terminator:"")
             }
         }
         print(rightCorner);
@@ -287,7 +287,7 @@ class Game
       if let str = readln() {
 
             // split on space and '-'
-          var coords = split(str.characters) { $0 == Character(" ") || $0 == Character("-") }.map{ String($0) }
+          var coords = str.characters.split { $0 == Character(" ") || $0 == Character("-") }.map{ String($0) }
 
           if (coords.count < 2) {
               return nil;
