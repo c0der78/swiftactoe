@@ -2,4 +2,6 @@
 
 simple tic tac toe in swift
 
-![Screenshot](screenshot.png?raw=true "Screenshot")
+I dare you to try and beat it! Computer too sm4rt!
+
+![Screenshot](swiftactoe.gif?raw=true "Screenshot")
