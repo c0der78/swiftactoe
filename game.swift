@@ -77,6 +77,8 @@ class Game
 
         var move: Point?;
         var imin: Int = 2;
+	var alpha = 2;
+	var beta = -2;
 
         // find the best move
         for point in pointsAvailable {
@@ -85,7 +87,7 @@ class Game
                 continue;
             }
 
-            let val = minmax(0, turn: self.computerPlayer, alpha: 2, beta: -2); 
+            let val = minmax(0, turn: self.computerPlayer, alpha: &alpha, beta: &beta); 
 
             board[point.x, point.y] = 0;
 
@@ -117,11 +119,11 @@ class Game
         printLine(13, leftCorner: "x \u{1B}[1;37m┌", rightCorner: "┐", interval: "┬");
 
 
-        for var i = 0; i < board.size; i++ {
+        for i in 0...board.size-1 {
             // draw each line
             print("\u{1B}[0m\(i+1) ", terminator:"");
 
-            for var j = 0; j < board.size; j++ {
+            for j in 0...board.size-1 {
 
                 print("\u{1B}[1;37m\u{2502}\u{1B}[1;33m", terminator:"");
 
@@ -150,15 +152,13 @@ class Game
 
     //! display the game status
     func displayWinner() {
-
-    if (board.hasWon(self.humanPlayer)) { 
-        print("You win!"); //Can't happen
-    } else if (board.hasWon(self.computerPlayer)) {
-        print("Unfortunately, you lost!");
-    } else {
-        print("It's a draw!");
-    }
-
+        if (board.hasWon(self.humanPlayer)) { 
+            print("You win!"); //Can't happen
+        } else if (board.hasWon(self.computerPlayer)) {
+            print("Unfortunately, you lost!");
+        } else {
+            print("It's a draw!");
+        }
     }
 
     //! get the opposing piece (X or O)
@@ -167,7 +167,7 @@ class Game
     }
 
     // the minmax algorithm to recursively determine the best move
-    private func minmax( depth: Int, turn: Int, var alpha: Int, var beta: Int) -> Int {  
+    private func minmax( depth: Int, turn: Int, inout alpha: Int, inout beta: Int) -> Int {  
 
         if (board.hasWon(self.humanPlayer)) { 
             return 1; 
@@ -195,7 +195,7 @@ class Game
                     continue;
                 }
 
-                let val = minmax(depth + 1, turn: self.humanPlayer, alpha: alpha, beta: beta);
+                let val = minmax(depth + 1, turn: self.humanPlayer, alpha: &alpha, beta: &beta);
 
                 if (val > imax) {
                     imax = val;
@@ -213,7 +213,7 @@ class Game
                     continue;
                 }
 
-                let val = minmax(depth + 1, turn: self.computerPlayer, alpha: alpha, beta: beta);
+                let val = minmax(depth + 1, turn: self.computerPlayer, alpha: &alpha, beta: &beta);
 
                 if (val < imin) {
                     imin = val;

@@ -21,9 +21,9 @@ class Board {
     init(size: Int = 3) {
         board = [];
 
-        for(var i = 0; i < size; i++) {
+        for _ in 0...size-1 {
             var line = [Int]();
-            for(var j = 0; j < size; j++) {
+            for _ in 0...size-1 {
                 line.append(0);
             }
             board.append(line);
@@ -33,9 +33,9 @@ class Board {
     init(copy: Board) {
         board = [];
 
-        for(var i = 0; i < size; i++) {
+        for i in 0...size-1 {
             var line = [Int]();
-            for(var j = 0; j < size; j++) {
+            for j in 0...size-1 {
                 line.append(copy[i, j]);
             }
             board.append(line);
@@ -51,9 +51,9 @@ class Board {
         var found = true;
 
         // check the first diagnal
-        for(var i = 0, j = 0; i < board.count && j < board.count; i++, j++) {
+        for i in 0...board.count-1 {
             // if not found
-            if(board[i][j] != player) {
+            if(board[i][i] != player) {
                 found = false;
                 break;
             }
@@ -64,13 +64,14 @@ class Board {
         }
 
         found = true;
-
-        for(var i = board.count-1, j = 0; i >= 0 && j < board.count; i--, j++) {
-
-            if (board[i][j] != player) {
+	var j = 0;
+	let i = board.count-1;
+	for i in i.stride(to: 0, by: -1) {
+            if (j >= board.count || board[i][j] != player) {
                 found = false;
                 break;
             }
+	    j += 1;
         }
 
         return found;
@@ -83,10 +84,10 @@ class Board {
         }
 
         // check each row
-        for (var i = 0; i < board.count; ++i) {
+        for i in 0...board.count-1 {
 
             var found = true;
-            for(var j = 0; j < board.count; j++) {
+            for j in 0...board.count-1 {
                 if(board[i][j] != player) {
                     found = false;
                     break;
@@ -97,10 +98,10 @@ class Board {
             }
         }
 
-        for(var i = 0; i < board.count; ++i) {
+        for i in 0...board.count-1 {
             var found = true;
 
-            for(var j = 0; j < board.count; ++j) {
+            for j in 0...board.count-1 {
                 if(board[j][i] != player) {
                     found = false;
                     break;
@@ -118,8 +119,8 @@ class Board {
     func availablePoints() -> [Point] {
         var availablePoints = [Point]();
 
-        for (var i = 0; i < board.count; ++i) {
-            for (var j = 0; j < board[i].count; ++j) {
+        for i in 0...board.count-1 {
+            for j in 0...board[i].count-1 {
                 if (board[i][j] == 0) {
                     availablePoints.append(Point(x: i, y: j));
                 }
