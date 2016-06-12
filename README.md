@@ -2,6 +2,14 @@
 
 simple tic tac toe in swift
 
-I dare you to try and beat it! Computer too sm4rt!
+## build
+
+1) start your docker machine
+
+2) execute ./build
+
+## play
+
+1) execute ./play
 
 ![Screenshot](swiftactoe.gif?raw=true "Screenshot")

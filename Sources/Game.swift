@@ -87,8 +87,8 @@ class Game
 
         var move: Point?;
         var imin: Int = 2;
-	var alpha = 2;
-	var beta = -2;
+	let alpha = 2;
+	let beta = -2;
 
         // find the best move
         for point in pointsAvailable {
@@ -97,7 +97,7 @@ class Game
                 continue;
             }
 
-            let val = minmax(depth: 0, turn: self.computerPlayer, alpha: &alpha, beta: &beta); 
+            let val = minmax(depth: 0, turn: self.computerPlayer, alpha: alpha, beta: beta); 
 
             board[point.x, point.y] = 0;
 
@@ -177,7 +177,10 @@ class Game
     }
 
     // the minmax algorithm to recursively determine the best move
-    private func minmax( depth: Int, turn: Int, alpha: inout Int, beta: inout Int) -> Int {  
+    private func minmax( depth: Int, turn: Int, alpha: Int, beta: Int) -> Int {  
+	
+	var alphaVal = alpha;
+	var betaVal = beta;
 
         if (board.hasWon(player: self.humanPlayer)) { 
             return 1; 
@@ -205,13 +208,13 @@ class Game
                     continue;
                 }
 
-                let val = minmax(depth: depth + 1, turn: self.humanPlayer, alpha: &alpha, beta: &beta);
+                let val = minmax(depth: depth + 1, turn: self.humanPlayer, alpha: alphaVal, beta: betaVal);
 
                 if (val > imax) {
                     imax = val;
-                    beta = imax;
+                    betaVal = imax;
                 }
-                if (val == 1 || imax >= alpha) {
+                if (val == 1 || imax >= alphaVal) {
                     board[point.x, point.y] = 0;
                     break;
                 }
@@ -223,14 +226,14 @@ class Game
                     continue;
                 }
 
-                let val = minmax(depth: depth + 1, turn: self.computerPlayer, alpha: &alpha, beta: &beta);
+                let val = minmax(depth: depth + 1, turn: self.computerPlayer, alpha: alphaVal, beta: betaVal);
 
                 if (val < imin) {
                     imin = val;
-                    alpha = imin;
+                    alphaVal = imin;
                 }
 
-                if (val == -1 || imin <= beta) {
+                if (val == -1 || imin <= betaVal) {
                     board[point.x, point.y] = 0;
                     break;
                 }

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -t -i swiftactoe /src/swiftactoe/.build/debug/SwifTacToe
