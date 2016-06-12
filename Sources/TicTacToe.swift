@@ -66,7 +66,7 @@ class Board {
         found = true;
 	var j = 0;
 	let i = board.count-1;
-	for i in i.stride(to: 0, by: -1) {
+	for i in stride(from: i, to: 0, by: -1) {
             if (j >= board.count || board[i][j] != player) {
                 found = false;
                 break;
@@ -79,7 +79,7 @@ class Board {
 
     func hasWon(player: Int) -> Bool {
         // check diagnal
-        if (self.hasWonDiagnal(player)) {
+        if (self.hasWonDiagnal(player: player)) {
             return true;
         }
 

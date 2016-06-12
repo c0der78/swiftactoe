@@ -1,4 +1,8 @@
-import Darwin;
+#if os(Linux)
+	import Glibc;
+#else
+	import Darwin;
+#endif
 
 func resetCursor() {
     print("\u{1B}[9A\u{1B}[J", terminator:"");

@@ -1,4 +1,8 @@
-import Darwin;
+#if os(Linux)
+	import Glibc
+#else
+	import Darwin
+#endif
 
 class Game
 {
@@ -17,7 +21,7 @@ class Game
 
     var isGameOver: Bool {
         //Game is over is someone has won, or board is full (draw)
-        return (board.hasWon(Game.PlayerX) || board.hasWon(Game.PlayerO) || board.availablePoints().count == 0);
+        return (board.hasWon(player: Game.PlayerX) || board.hasWon(player: Game.PlayerO) || board.availablePoints().count == 0);
     }
 
     //! reads input and determines human player (X or O)
@@ -32,8 +36,14 @@ class Game
 
         // do the computers first move
         if(self.humanPlayer == Game.PlayerO){
+#if os(Linux)
+	    let p = Point(x: Int(random() % 3), y: Int(random() % 3));
+#else
             let p = Point(x: Int(arc4random_uniform(3)), y: Int(arc4random_uniform(3)));
-            b.placeMove(p, player: self.computerPlayer);
+#endif
+       	    if(!b.placeMove(point: p, player: self.computerPlayer)) {
+		return false;
+	    }
         }
 
         return true;
@@ -52,7 +62,7 @@ class Game
             return false;
         }
 
-        if (!b.placeMove(userMove!, player: self.humanPlayer) ) { //2 for O and O is the user
+        if (!b.placeMove(point: userMove!, player: self.humanPlayer) ) { //2 for O and O is the user
             print("\u{1B}[A\r\u{1B}[2KThat move is already taken.  ", terminator:"");
             return false;
         }
@@ -83,11 +93,11 @@ class Game
         // find the best move
         for point in pointsAvailable {
 
-            if(!board.placeMove(point, player: self.computerPlayer)) {
+            if(!board.placeMove(point: point, player: self.computerPlayer)) {
                 continue;
             }
 
-            let val = minmax(0, turn: self.computerPlayer, alpha: &alpha, beta: &beta); 
+            let val = minmax(depth: 0, turn: self.computerPlayer, alpha: &alpha, beta: &beta); 
 
             board[point.x, point.y] = 0;
 
@@ -102,7 +112,7 @@ class Game
         }
 
         if (move != nil) {
-            return board.placeMove(move!, player: self.computerPlayer);
+            return board.placeMove(point: move!, player: self.computerPlayer);
         }
 
         return false;
@@ -116,7 +126,7 @@ class Game
         print("\u{1B}[0m  y 1   2   3");
 
         // draw the top of the board
-        printLine(13, leftCorner: "x \u{1B}[1;37m┌", rightCorner: "┐", interval: "┬");
+        printLine(length: 13, leftCorner: "x \u{1B}[1;37m┌", rightCorner: "┐", interval: "┬");
 
 
         for i in 0...board.size-1 {
@@ -142,19 +152,19 @@ class Game
             print("\u{1B}[1;37m│");
 
             if ((i + 1) != board.size) {
-                printLine(13, leftCorner: "  \u{1B}[1;37m├", rightCorner: "┤", interval: "┼");
+                printLine(length: 13, leftCorner: "  \u{1B}[1;37m├", rightCorner: "┤", interval: "┼");
             }
         }
 
         // draw the bottom border
-        printLine(13, leftCorner: "  \u{1B}[1;37m└", rightCorner: "┘\u{1B}[0m", interval: "┴");
+        printLine(length: 13, leftCorner: "  \u{1B}[1;37m└", rightCorner: "┘\u{1B}[0m", interval: "┴");
     } 
 
     //! display the game status
     func displayWinner() {
-        if (board.hasWon(self.humanPlayer)) { 
+        if (board.hasWon(player: self.humanPlayer)) { 
             print("You win!"); //Can't happen
-        } else if (board.hasWon(self.computerPlayer)) {
+        } else if (board.hasWon(player: self.computerPlayer)) {
             print("Unfortunately, you lost!");
         } else {
             print("It's a draw!");
@@ -167,13 +177,13 @@ class Game
     }
 
     // the minmax algorithm to recursively determine the best move
-    private func minmax( depth: Int, turn: Int, inout alpha: Int, inout beta: Int) -> Int {  
+    private func minmax( depth: Int, turn: Int, alpha: inout Int, beta: inout Int) -> Int {  
 
-        if (board.hasWon(self.humanPlayer)) { 
+        if (board.hasWon(player: self.humanPlayer)) { 
             return 1; 
         }
 
-        if (board.hasWon(self.computerPlayer)) { 
+        if (board.hasWon(player: self.computerPlayer)) { 
             return -1; 
         }
 
@@ -190,12 +200,12 @@ class Game
 
             if (turn == self.computerPlayer) { 
 
-                if (!board.placeMove(point, player: self.humanPlayer)) {
+                if (!board.placeMove(point: point, player: self.humanPlayer)) {
                     board[point.x, point.y] = 0;
                     continue;
                 }
 
-                let val = minmax(depth + 1, turn: self.humanPlayer, alpha: &alpha, beta: &beta);
+                let val = minmax(depth: depth + 1, turn: self.humanPlayer, alpha: &alpha, beta: &beta);
 
                 if (val > imax) {
                     imax = val;
@@ -208,12 +218,12 @@ class Game
 
             } else if (turn == self.humanPlayer) {
 
-                if (!board.placeMove(point, player: self.computerPlayer)) {
+                if (!board.placeMove(point: point, player: self.computerPlayer)) {
                     board[point.x, point.y] = 0;
                     continue;
                 }
 
-                let val = minmax(depth + 1, turn: self.computerPlayer, alpha: &alpha, beta: &beta);
+                let val = minmax(depth: depth + 1, turn: self.computerPlayer, alpha: &alpha, beta: &beta);
 
                 if (val < imin) {
                     imin = val;
@@ -259,13 +269,7 @@ class Game
         // always add trailing zero
       cstr.append(0)
 
-      let rval = String.fromCStringRepairingIllFormedUTF8(UnsafePointer<CChar>(cstr))
-
-      if (rval.hadError) {
-          return nil;
-      }
-
-      return rval.0;
+      return String.init(cString: UnsafePointer<CChar>(cstr))
   }
 
     // read a player from input
