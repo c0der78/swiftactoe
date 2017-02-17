@@ -1,45 +1,45 @@
 #if os(Linux)
-	import Glibc;
+	import Glibc
 #else
-	import Darwin;
+	import Darwin
 #endif
 
 func resetCursor() {
-    print("\u{1B}[9A\u{1B}[J", terminator:"");
+    print("\u{1B}[9A\u{1B}[J", terminator: "")
 }
 
-var b = Board();
+var b = Board()
 
-var game = Game(board: b);
+var game = Game(board: b)
 
 repeat {
-    print("Do you want to be X or O (X goes first)? ", terminator: "");
+    print("Do you want to be X or O (X goes first)? ", terminator: "")
 }
-while(!game.setHumanPlayerFromInput())
+while !game.setHumanPlayerFromInput()
 
-game.displayBoard();
+game.displayBoard()
 
 repeat {
 
-    if (!game.placeHumanMoveFromInput()) {
+    if !game.placeHumanMoveFromInput() {
         // try again, get new input
-        continue;
+        continue
     }
 
-    if (!game.placeComputerMove()) {
+    if !game.placeComputerMove() {
         // system error
-        break;
+        break
     }
 
-    resetCursor();
+    resetCursor()
 
-    game.displayBoard();
+    game.displayBoard()
 }
-while(!game.isGameOver)
+while !game.isGameOver
 
-resetCursor();
+resetCursor()
 
-game.displayBoard();
+game.displayBoard()
 
-game.displayWinner();
+game.displayWinner()
 
