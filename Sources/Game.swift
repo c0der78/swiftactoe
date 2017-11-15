@@ -40,13 +40,13 @@ class Game
         // do the computers first move
         if self.currentPlayer == Game.PlayerO {
 #if os(Linux)
-	    let p = Point(x: Int(random() % 3), y: Int(random() % 3))
+            let p = Point(x: Int(random() % 3), y: Int(random() % 3))
 #else
             let p = Point(x: Int(arc4random_uniform(3)), y: Int(arc4random_uniform(3)))
 #endif
-	    if(!b.placeMove(point: p, player: self.opposingPlayer)) {
-		      return false
-	    }
+            if(!b.placeMove(point: p, player: self.opposingPlayer)) {
+                return false
+            }
         }
 
         return true
@@ -76,7 +76,7 @@ class Game
     //! calculate a computer move and place
     func placeComputerMove() -> Bool {
 
-        if isGameOver {
+        if isGameOver { 
           return false
         }
 
@@ -102,7 +102,7 @@ class Game
                 continue
             }
 
-            let val = alphabeta(board: board, depth: 0, alpha: &alpha, beta: &beta, turn: self.opposingPlayer)
+            let val = alphabeta(board: board, depth: 0, alpha: &alpha, beta: &beta, turn: self.opposingPlayer) 
 
             if imin > val {
                 imin = val
@@ -164,7 +164,7 @@ class Game
 
     //! display the game status
     func displayWinner() {
-        if board.hasWon(player: self.currentPlayer) {
+        if board.hasWon(player: self.currentPlayer) { 
             print("You win!") //Can't happen
         } else if board.hasWon(player: self.opposingPlayer) {
             print("Unfortunately, you lost!")
@@ -185,7 +185,7 @@ class Game
             return 1
         }
 
-        if board.hasWon(player: self.opposingPlayer) {
+        if board.hasWon(player: self.opposingPlayer) { 
             return -1
         }
 

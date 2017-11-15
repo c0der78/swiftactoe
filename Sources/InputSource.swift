@@ -5,8 +5,8 @@
 #endif
 
 protocol InputSource {
-	func readPoint() -> Point?
-	func readPlayer() -> Int?
+  	func readPoint() -> Point?
+  	func readPlayer() -> Int?
 }
 
 class Console: InputSource {
