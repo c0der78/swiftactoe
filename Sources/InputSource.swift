@@ -18,7 +18,7 @@ class Console: InputSource {
       var c: Int32 = 0
       while c != 4 {
           c = getchar()
-          if (c == 10 || c == 13) || c > 255 { break }
+          if c == 10 || c > 255 { break }
           cstr.append(UInt8(c))
       }
         // always add trailing zero

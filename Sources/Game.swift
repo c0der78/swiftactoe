@@ -1,7 +1,7 @@
 #if os(Linux)
-  import Glibc
+import Glibc
 #else
-  import Darwin
+import Darwin
 #endif
 
 class Game
@@ -40,13 +40,13 @@ class Game
         // do the computers first move
         if self.currentPlayer == Game.PlayerO {
 #if os(Linux)
-	    let p = Point(x: Int(random() % 3), y: Int(random() % 3))
+            let p = Point(x: Int(random() % 3), y: Int(random() % 3))
 #else
             let p = Point(x: Int(arc4random_uniform(3)), y: Int(arc4random_uniform(3)))
 #endif
-	    if(!b.placeMove(point: p, player: self.opposingPlayer)) {
-		      return false
-	    }
+            if(!b.placeMove(point: p, player: self.opposingPlayer)) {
+                  return false
+            }
         }
 
         return true
@@ -92,8 +92,8 @@ class Game
 
         var move: Point?
         var imin: Int = 2
-	      var alpha = 2
-	      var beta = -2
+        var alpha = 2
+        var beta = -2
 
         // find the best move
         for point in pointsAvailable {

@@ -1,7 +1,7 @@
 #if os(Linux)
-  import Glibc
+import Glibc
 #else
-  import Darwin
+import Darwin
 #endif
 import Nanomsg
 
@@ -37,7 +37,6 @@ class Multiplayer {
         return false
       }
     }
-
 }
 
 class Client: Multiplayer, InputSource {
@@ -49,8 +48,8 @@ class Client: Multiplayer, InputSource {
     func connect(addr: String) -> Bool {
         do {
             if game.currentPlayer == Game.PlayerX {
-                  let eid = try sock.bind(addr)
-                  return eid != 0
+                let eid = try sock.bind(addr)
+                return eid != 0
             } else {
                 let eid = try sock.connect(addr)
                 return eid != 0
@@ -60,8 +59,36 @@ class Client: Multiplayer, InputSource {
         }
     }
 
-    func readPlayer() -> Int? {
+    private func readln() -> String? {
 
+      var buf: String = String()
+
+      while(true) {
+            let line = recieve()
+            if (line == nil) {
+              return nil;
+            }
+            let pos = line!.characters.index(of: "\n")
+            if (pos != nil) {
+              let str = line!.characters.prefix(upTo: pos!)
+              buf.append(String(str));
+              return buf;
+            } else {
+              buf.append(line!)
+            }
+        }
+    }
+
+    func readPlayer() -> Int? {
+        if let str = readln() {
+          let c = str[str.startIndex]
+
+            if c == "X" || c == "x" {
+              return Game.PlayerX
+            } else if c == "O" || c == "o" {
+              return Game.PlayerO
+            }
+        }
         return nil
     }
 

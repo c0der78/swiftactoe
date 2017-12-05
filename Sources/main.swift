@@ -8,6 +8,10 @@ func resetCursor() {
     print("\u{1B}[9A\u{1B}[J", terminator: "")
 }
 
+if (CommandLine.argc > 1) {
+    var arg = CommandLine.arguments[1]
+}
+
 var b = Board()
 
 var game = Game(board: b)
