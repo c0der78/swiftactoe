@@ -1,0 +1,5 @@
+module NanomsgC {
+  header "./nanomsg.h"
+  link "nanomsg"
+  export *
+}

@@ -1,41 +1,4 @@
 
-class Point {
-
-    var x: Int
-    var y: Int
-
-    init(x: Int, y: Int) {
-        self.x = x
-        self.y = y
-    }
-
-    var description: String {
-        return "[\(x), \(y)]"
-    }
-
-    class func parse(str: String) -> Point? {
-        // split on space and '-'
-          var coords = str.characters.split { $0 == Character(" ") || $0 == Character("-") }.map { String($0) }
-
-          if coords.count < 2 {
-              return nil
-          }
-
-          let x = Int(coords[0])
-          let y = Int(coords[1])
-
-          if x == nil || y == nil {
-              return nil
-          }
-
-          if x! < 1 || x! > 3 || y! < 1 || y! > 3 {
-              return nil
-          }
-
-          return Point(x: x! - 1, y: y! - 1)
-    }
-}
-
 class Board {
 
     var board: [[Int]]
@@ -68,6 +31,14 @@ class Board {
         return board.count
     }
 
+    var moves: Int {
+      return board.count * board.count 
+    }
+
+    func randomMove() -> Point? {
+       return self.availableMoves().randomElement()
+    }
+
     private func hasWonDiagnal(player: Int) -> Bool {
 
         var found = true
@@ -86,9 +57,9 @@ class Board {
         }
 
         found = true
-    	var j = 0
-    	let i = board.count-1
-    	for i in stride(from: i, to: -1, by: -1) {
+        var j = 0
+        let i = board.count-1
+        for i in stride(from: i, to: -1, by: -1) {
             if j >= board.count || board[i][j] != player {
                 found = false
                 break
@@ -99,7 +70,7 @@ class Board {
         return found
     }
 
-    func hasWon(player: Int) -> Bool {
+    func hasWon(_ player: Int) -> Bool {
         // check diagnal
         if self.hasWonDiagnal(player: player) {
             return true;
@@ -138,7 +109,7 @@ class Board {
         return false
     }
 
-    func availablePoints() -> [Point] {
+    func availableMoves() -> [Point] {
         var availablePoints = [Point]()
 
         for i in 0...board.count-1 {
