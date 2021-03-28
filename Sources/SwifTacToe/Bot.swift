@@ -4,7 +4,7 @@
 	import Darwin
 #endif
 
-class Bot : Player, InputSource {
+class Bot : Player, InputSource, OutputSource {
 
   weak var board: Board?
 
@@ -12,7 +12,12 @@ class Bot : Player, InputSource {
     super.init()
     super.tile = tile
     super.input = self
+    super.output = self
     self.board = board 
+  }
+
+  func promptMove() {
+    print()
   }
 
   func readMove() -> Point? {

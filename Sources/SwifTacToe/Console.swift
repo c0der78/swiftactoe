@@ -129,10 +129,10 @@ class ConsoleIO : Console, IO {
 
               switch(board[i, j]) {
                   case Player.O:
-                      print(" O ", terminator:"")
+                      print(" \u{1B}[1;31mO ", terminator:"")
                       break;
                   case Player.X:
-                      print(" X ", terminator:"")
+                      print(" \u{1B}[1;35mX ", terminator:"")
                       break;
                   default:
                       print("   ", terminator:"")
