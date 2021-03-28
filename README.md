@@ -1,15 +1,23 @@
 # swiftactoe
 
-simple tic tac toe in swift
+Tic tac toe in swift
+
+## dependencies
+
+- `make` for building
+- `nanomsg` for network
+- `docker`, `podman` or `swift 5.3`
 
 ## build
 
-1) start your docker machine
-
-2) execute ./build
+See `make help`
 
 ## play
 
-1) execute ./play
+![Screenshot](swiftactoe.gif?raw=true "Demo")
 
-![Screenshot](swiftactoe.gif?raw=true "Screenshot")
+## todo
+
+- [x] upgrade swift
+- [x] refactor for multiplayer
+- [ ] finish multiplayer
