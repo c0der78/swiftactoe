@@ -1,26 +1,64 @@
 
 DOCKER ?= podman
-CMD := swiftactoe
+CMD := SwifTacToe
+NAME := swiftactoe
+ADDRESS := ipc:///tmp/$(NAME).ipc
+LOGFILE ?= $(CMD).log
 
-.PHONY: run build container image help
+.PHONY: run build image help server client
 
 all: help
 
 help:
-	@echo "run          build and run the program"
-	@echo "build        build the program"
-	@echo "container    build and run the container"
-	@echo "image        build the container image"
+	@echo ""
+	@echo "Building:"
+	@echo ""
+	@echo "  build        build the program"
+	@echo ""
+	@echo "Single player:"
+	@echo ""
+	@echo "  run          run in singleplayer"
+	@echo ""
+	@echo "Multi player:"
+	@echo ""
+	@echo "  server       host a game ($(ADDRESS))"
+	@echo "  client       join a hosted game"
+	@echo ""
+	@echo "Container:"
+	@echo ""
+	@echo "  image        include to run as a container with $(DOCKER)"
+	@echo "               example: '$(MAKE) image server'"
 	@echo ""
 
+image:
+	@$(eval IMAGE := swiftactoe)
+
 run:
-	@swift run
+	@if test -z "$(IMAGE)"; then \
+		swift run 2> $(LOGFILE); \
+	else \
+	  $(DOCKER) run --name $(IMAGE) -it $(IMAGE) 2> $(LOGFILE); \
+	fi
 
 build:
-	@swift build
+	@if test -z "$(IMAGE)"; then \
+		swift build; \
+	else \
+		$(DOCKER) build -t $(IMAGE) . ; \
+	fi
 
-container: image
-	@$(DOCKER) run --name $(CMD) -it $(CMD)
+server:
+	@if test -z "$(IMAGE)"; then \
+		swift run $(CMD) -s -a $(ADDRESS) 2> $(LOGFILE); \
+	else \
+	  $(DOCKER) volume create $(IMAGE) || test true; \
+		$(DOCKER) run --name $(IMAGE) -v $(IMAGE):$(IPCDIR) -it $(IMAGE) -s -a $(ADDRESS) 2> $(LOGFILE); \
+	fi
 
-image:
-	@$(DOCKER) build -t $(CMD) .
+client:
+	@if test -z "$(IMAGE)"; then \
+		swift run $(CMD) -j -a $(ADDRESS) 2> $(LOGFILE); \
+	else \
+	  $(DOCKER) volume create $(IMAGE) || test true; \
+		$(DOCKER) run --name $(IMAGE) -v $(IMAGE):$(IPCDIR) -it $(IMAGE) -j -a $(ADDRESS) 2> $(LOGFILE); \
+	fi

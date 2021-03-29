@@ -1,7 +1,3 @@
-
-protocol OutputSource : class {
+protocol OutputSource: class {
   func promptMove()
-}
-
-protocol PlayerOutput : OutputSource {
 }

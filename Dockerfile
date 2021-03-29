@@ -1,4 +1,4 @@
-FROM swift:bionic as builder
+FROM swift:5.3-bionic as builder
 
 RUN apt update
 
@@ -19,7 +19,6 @@ RUN apt install -y libnanomsg-dev
 RUN apt clean autoclean
 RUN apt autoremove --yes
 RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
-
 
 COPY --from=builder /src/.build/release/SwifTacToe /bin/
 

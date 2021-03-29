@@ -1,14 +1,8 @@
+let cmd = SwifTacToe()
 
-let game = Game()
-
-game.load()
-
-repeat {
-    game.render()
-
-    _ = game.update()
+do {
+  try cmd.execute()
+} catch {
+  print(error, to: &errorStream)
+  osexit(1)
 }
-while !game.isGameOver
-
-game.finish()
-

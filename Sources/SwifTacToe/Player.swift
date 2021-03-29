@@ -1,11 +1,35 @@
+typealias Tile = Character
 
-typealias Tile = Int 
+extension Tile {
+  static var none: Tile = Tile("?")
+
+  static func parse(_ str: String) -> Tile? {
+    switch str[str.startIndex].lowercased() {
+    case "x":
+      return Player.x
+    case "o":
+      return Player.o
+    default:
+      return nil
+    }
+  }
+  var opposite: Tile {
+    switch self {
+    case Player.x:
+      return Player.o
+    case Player.o:
+      return Player.x
+    default:
+      return Tile("?")
+    }
+  }
+}
 
 class Player {
-  static let X: Tile = 1
-  static let O: Tile = 2
+  static let x: Tile = Tile("X")
+  static let o: Tile = Tile("O")
 
-  var tile: Tile = 0 
+  var tile: Tile = Tile.none
 
   weak var input: InputSource?
   weak var output: OutputSource?
@@ -15,18 +39,22 @@ class Player {
     self.output = output
   }
 
+  convenience init(network: Network) {
+    self.init(input: network, output: network)
+  }
+
   init() {}
 
-  var isFirst: Bool { return self.tile == Player.X }
+  var isFirst: Bool { return self.tile == Player.x }
 }
 
 func == (a: Player, b: Player) -> Bool {
   return a.tile == b.tile
 }
 
-func == (a: Optional<Player>, b: Player) -> Bool {
+func == (a: Player?, b: Player) -> Bool {
   guard let tile = a?.tile else { return false }
-  return tile == b.tile 
+  return tile == b.tile
 }
 
 func == (a: Player, b: Tile) -> Bool {

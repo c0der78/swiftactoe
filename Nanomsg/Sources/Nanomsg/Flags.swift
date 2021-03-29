@@ -1,5 +1,5 @@
-/** Operation flags */
+/// Operation flags
 public enum Flags: CInt {
-    case None = 0
-    case Dontwait = 1
+  case None = 0
+  case dontwait = 1
 }

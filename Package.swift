@@ -14,8 +14,11 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        //.package(url: "https://github.com/autozimu/Nanomsg.swift.git", from: "0.0.0")
-        .package(path: "./Nanomsg")
+        //.package(url: "https://github.com/autozimu/Nanomsg.swift", from: "0.0.0")
+        //.package(name: "NNG", url: "https://github.com/graphiclife/nng-swift.git", .branch("master")),
+        .package(path: "./Nanomsg"),
+        //.package(url: "https://github.com/jakeheis/SwiftCLI", from: "6.0.0"),
+        //.package(name: "TraceLog", url: "https://github.com/tonystone/tracelog", from: "5.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
