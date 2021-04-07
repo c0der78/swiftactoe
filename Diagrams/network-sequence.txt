@@ -1,0 +1,23 @@
+@startuml
+
+[*] --> ParseOptions
+ParseOptions : network flags passed
+ParseOptions --> NetworkGame : Hosting
+ParseOptions --> NetworkGame : Joining
+NetworkGame : specified an address to
+NetworkGame : connect with
+NetworkGame --> Handshake : Hosting
+NetworkGame --> Handshake : Joining
+NetworkGame --> Play : Starts
+Handshake : sharing state on the network
+Handshake --> NetworkGame : Update
+Play : connected playing state
+Play --> Move : Update
+Move: the current turn move
+Move --> Handshake : Send
+Play --> Turn : Next
+Turn : who is current player
+Turn --> Play : Current
+Play --> [*]
+
+@enduml
