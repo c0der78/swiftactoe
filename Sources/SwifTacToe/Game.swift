@@ -66,6 +66,7 @@ class Game {
     self.io.promptTile()
 
     guard let choice = try self.io.readTile() else {
+      self.io.buffer("Invalid move.  Try x y coordinates.")
       throw Err.parsing("reading player")
     }
 

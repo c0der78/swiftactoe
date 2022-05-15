@@ -66,8 +66,10 @@ class ConsoleIO: Console, IO {
 
     self.draw(board: board)
 
-    if !super.outputBuf.isEmpty {
-      print(super.outputBuf.removeLast(), terminator: "")
+    var it = super.outputBuf.makeIterator()
+
+    while let buf = it.next() {
+      print(buf)
     }
     flush()
   }

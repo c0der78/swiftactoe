@@ -9,6 +9,6 @@ let package = Package(
       .library(name: "NanomsgC", targets: [ "NanomsgC" ])
     ],
     targets: [
-      .target(name: "NanomsgC")
+      .systemLibrary(name: "NanomsgC")
     ]
 )

@@ -59,8 +59,12 @@ class SwifTacToe {
     }
 
     repeat {
-      try game.render()
-      try game.update()
+      do {
+        try game.render()
+        try game.update()
+      } catch let err {
+        logger.trace { "Error \(err)" }
+      }
     } while !game.isGameOver
   }
 }

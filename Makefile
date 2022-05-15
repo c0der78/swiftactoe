@@ -1,5 +1,5 @@
 
-DOCKER ?= podman
+DOCKER ?= docker
 CMD := SwifTacToe
 NAME := swiftactoe
 ADDRESS := ipc:///tmp/$(NAME).ipc

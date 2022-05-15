@@ -1,3 +1,3 @@
-protocol OutputSource: class {
+protocol OutputSource: AnyObject {
   func promptMove()
 }
