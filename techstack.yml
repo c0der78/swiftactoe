@@ -2,7 +2,7 @@ repo_name: ryjen/swiftactoe
 report_id: de8f526a1546ff8dbcbb19500a478a0b
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-23T22:17:50+00:00'
+timestamp: '2024-02-29T19:36:41+00:00'
 requested_by: ryjen
 provider: github
 branch: main
@@ -19,7 +19,7 @@ tools:
   detection_source_url: https://github.com/ryjen/swiftactoe
   detection_source: Repo Metadata
 - name: Swift
-  description: 'An innovative new programming language for Cocoa and Cocoa Touch. '
+  description: An innovative new programming language for Cocoa and Cocoa Touch.
   website_url: https://developer.apple.com/swift/
   license: Apache-2.0
   open_source: true
